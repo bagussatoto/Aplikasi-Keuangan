@@ -1,0 +1,32 @@
+version: '3.5'
+services:
+  php-apache-environment:
+    image: novend10/aplikasi_keuangan_php
+    container_name: php-apache
+    depends_on:
+      - db
+    volumes:
+      - ./Aplikasi_keuangan_php:/var/wwww/html/
+    ports:
+      - 8000:80
+    networks:
+      - backend
+  
+  db:
+    container_name: db
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Novend1*
+      MYSQL_DATABASE: keuangan
+    ports: 
+      - ${SERVER_PORT_DB:-3307}:3306
+    volumes:
+      - db:/var/lib/mysql
+      - ./Aplikasi_keuangan_php/keuangan.sql:/docker-entrypoint-initdb.d/keuangan.sql
+    networks:
+      - backend
+
+volumes:
+  db:
+
